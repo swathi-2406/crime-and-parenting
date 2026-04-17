@@ -1,0 +1,49 @@
+country,gini,gdp_per_capita,unemployment,urbanization,source
+Argentina,42.9,9938,11.0,92.0,World Bank Development Indicators 2022
+Australia,34.3,55060,5.1,86.4,World Bank Development Indicators 2022
+Brazil,53.4,7507,13.2,87.1,World Bank Development Indicators 2022
+Canada,33.3,52051,7.5,81.7,World Bank Development Indicators 2022
+Chile,44.9,15921,9.1,88.0,World Bank Development Indicators 2022
+China,38.5,12556,5.1,62.5,World Bank Development Indicators 2022
+Colombia,51.3,5882,13.7,81.6,World Bank Development Indicators 2022
+Denmark,28.8,68008,5.1,88.2,World Bank Development Indicators 2022
+Ecuador,45.7,5937,5.0,64.4,World Bank Development Indicators 2022
+Egypt,31.5,3699,7.3,42.8,World Bank Development Indicators 2022
+Ethiopia,35.0,925,3.1,22.2,World Bank Development Indicators 2022
+France,31.5,40964,7.9,81.7,World Bank Development Indicators 2022
+Germany,31.7,50801,3.1,77.5,World Bank Development Indicators 2022
+Ghana,43.5,2362,4.3,58.0,World Bank Development Indicators 2022
+Hong Kong,53.9,49036,5.8,100.0,World Bank Development Indicators 2022
+India,35.7,2257,7.4,35.9,World Bank Development Indicators 2022
+Indonesia,38.2,4291,5.8,57.9,World Bank Development Indicators 2022
+Iran,40.9,5797,10.8,76.3,World Bank Development Indicators 2022
+Italy,35.9,34776,9.5,71.2,World Bank Development Indicators 2022
+Japan,32.9,39340,2.8,91.8,World Bank Development Indicators 2022
+Jordan,33.7,4286,24.7,91.6,World Bank Development Indicators 2022
+Kenya,40.8,1838,5.7,28.5,World Bank Development Indicators 2022
+Mexico,45.4,9926,4.0,80.7,World Bank Development Indicators 2022
+Morocco,39.5,3355,11.5,63.5,World Bank Development Indicators 2022
+Netherlands,28.2,58061,3.8,92.5,World Bank Development Indicators 2022
+New Zealand,33.0,42084,4.6,86.7,World Bank Development Indicators 2022
+Nigeria,35.1,2065,9.7,53.0,World Bank Development Indicators 2022
+Norway,26.1,89154,4.4,83.8,World Bank Development Indicators 2022
+Peru,43.8,6621,7.7,78.3,World Bank Development Indicators 2022
+Philippines,42.3,3548,7.8,47.7,World Bank Development Indicators 2022
+Poland,28.8,15694,3.4,60.1,World Bank Development Indicators 2022
+Russia,36.0,11273,4.8,74.8,World Bank Development Indicators 2022
+Saudi Arabia,45.9,22993,7.4,84.0,World Bank Development Indicators 2022
+Singapore,45.9,59798,2.7,100.0,World Bank Development Indicators 2022
+South Africa,63.0,6001,33.9,68.0,World Bank Development Indicators 2022
+South Korea,31.4,31497,3.7,81.4,World Bank Development Indicators 2022
+Spain,34.7,30090,15.3,80.8,World Bank Development Indicators 2022
+Sweden,27.6,58977,8.8,88.2,World Bank Development Indicators 2022
+Switzerland,33.1,94696,4.9,74.0,World Bank Development Indicators 2022
+Taiwan,33.9,32811,3.8,79.0,World Bank Development Indicators 2022
+Tanzania,37.8,1105,2.6,37.0,World Bank Development Indicators 2022
+Thailand,36.4,7233,1.5,52.2,World Bank Development Indicators 2022
+Turkey,41.9,9661,13.2,76.6,World Bank Development Indicators 2022
+Ukraine,25.6,3984,9.9,69.7,World Bank Development Indicators 2022
+United Kingdom,35.1,46344,4.5,84.2,World Bank Development Indicators 2022
+United States,41.5,63544,5.4,82.7,World Bank Development Indicators 2022
+Venezuela,44.8,1600,7.0,88.2,World Bank Development Indicators 2022
+Vietnam,35.7,3756,2.4,38.1,World Bank Development Indicators 2022

@@ -1,0 +1,13 @@
+predictor,pearson_r,pearson_p,spearman_r,spearman_p,n,significant_p05
+idv,-0.307,0.034,-0.252,0.0839,48,True
+collectivism,0.307,0.034,0.252,0.0839,48,True
+wvs_obedience,0.462,0.0009,0.494,0.0004,48,True
+wvs_independence,-0.451,0.0013,-0.481,0.0005,48,True
+wvs_hard_work,0.332,0.0211,0.208,0.1563,48,True
+wvs_trust,-0.594,0.0,-0.646,0.0,48,True
+pdi,0.348,0.0153,0.366,0.0104,48,True
+uai,0.252,0.0837,0.221,0.1309,48,False
+gini,0.575,0.0,0.469,0.0008,48,True
+log_gdp,-0.573,0.0,-0.603,0.0,48,True
+unemployment,0.376,0.0085,0.328,0.0229,48,True
+urbanization,-0.19,0.1962,-0.281,0.0528,48,False

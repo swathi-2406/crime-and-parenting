@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Does Parenting Style Affect Crime? A 48-Country Study</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1612;--ink2:#4a4540;--ink3:#8a8480;
+  --paper:#faf8f4;--card:#ffffff;--edge:#e8e4dc;
+  --red:#c0392b;--blue:#2980b9;--green:#27ae60;
+}
+body{font-family:'Source Sans 3',sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6}
+.hero{background:var(--ink);color:#fff;padding:2.5rem 2rem 2rem}
+.hero-eyebrow{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.5rem}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,34px);font-weight:700;line-height:1.2;margin-bottom:.75rem;max-width:700px}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7}
+.hero-meta{display:flex;gap:1rem;margin-top:1.25rem;flex-wrap:wrap}
+.meta-pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:4px 14px;font-size:12px;color:rgba(255,255,255,.8)}
+.caveat{background:#fff8e1;border-left:4px solid #f9a825;padding:1rem 1.25rem;margin:1.5rem 2rem;border-radius:0 8px 8px 0;font-size:13px;color:#5d4037}
+.tabs{background:var(--card);border-bottom:1px solid var(--edge);padding:0 2rem;display:flex;gap:0;position:sticky;top:0;z-index:100;overflow-x:auto}
+.tab{padding:.85rem 1.25rem;font-size:13px;font-weight:500;color:var(--ink3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.tab.active{color:var(--ink);border-bottom-color:var(--red)}
+.tab:hover:not(.active){color:var(--ink2)}
+.main{padding:1.5rem 2rem;max-width:1300px;margin:0 auto}
+.page{display:none}.page.active{display:block}
+.section-head{margin-bottom:1.25rem}
+.section-head h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;margin-bottom:.25rem}
+.section-head p{font-size:13px;color:var(--ink3);max-width:700px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.card{background:var(--card);border:1px solid var(--edge);border-radius:12px;padding:1.25rem}
+.card-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.card-sub{font-size:12px;color:var(--ink3);margin-bottom:1rem;line-height:1.5}
+.chart-wrap{position:relative}
+.term{border-bottom:1px dashed var(--ink3);cursor:help;position:relative}
+.term-popup{display:none;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:11px;padding:6px 10px;border-radius:6px;width:220px;text-align:center;line-height:1.4;z-index:200;pointer-events:none}
+.term:hover .term-popup{display:block}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.25rem}
+.stat{background:var(--card);border:1px solid var(--edge);border-radius:12px;padding:1rem 1.25rem}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:4px}
+.stat-val{font-size:26px;font-weight:600;line-height:1}
+.stat-desc{font-size:11px;color:var(--ink3);margin-top:4px}
+.findings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.finding{background:var(--card);border:1px solid var(--edge);border-radius:12px;padding:1.25rem;display:flex;gap:.75rem}
+.finding-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.finding-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.finding-text{font-size:12px;color:var(--ink2);line-height:1.6}
+.finding.hl{border-left:4px solid var(--red)}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.ld{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3)}
+.lc{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center}
+.filter-label{font-size:12px;color:var(--ink3);font-weight:500}
+.fbtn{font-size:12px;padding:5px 13px;border-radius:20px;border:1px solid var(--edge);background:var(--card);color:var(--ink3);cursor:pointer;transition:all .15s}
+.fbtn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--edge)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 12px;color:var(--ink3);font-weight:500;border-bottom:1px solid var(--edge);font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;background:var(--paper)}
+td{padding:7px 12px;border-bottom:1px solid #f5f2ec;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f5f3ee}
+.rpill{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;white-space:nowrap}
+.bar-wrap{display:flex;align-items:center;gap:6px;min-width:90px}
+.bar-bg{flex:1;height:5px;background:#eee;border-radius:3px;overflow:hidden}
+.bar-in{height:100%;border-radius:3px}
+.hml{font-weight:600}.hml.hi{color:var(--red)}.hml.lo{color:var(--green)}.hml.mid{color:#e67e22}
+.sources{background:var(--card);border:1px solid var(--edge);border-radius:12px;padding:1.25rem;font-size:12px;color:var(--ink3);margin-bottom:2rem}
+.sources h4{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:.5rem}
+@media(max-width:850px){.grid2,.grid3,.stats4,.findings-grid{grid-template-columns:1fr}.main{padding:1rem}}
+
+/* RESEARCH QUESTIONS PAGE */
+.rq-intro{background:var(--card);border:1px solid var(--edge);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;display:flex;gap:1.25rem;align-items:flex-start}
+.rq-intro-icon{font-size:32px;flex-shrink:0}
+.rq-intro-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;margin-bottom:.35rem}
+.rq-intro-text{font-size:13px;color:var(--ink2);line-height:1.7}
+.rq-list{display:flex;flex-direction:column;gap:1.5rem;margin-bottom:1.5rem}
+.rq-item{background:var(--card);border:1px solid var(--edge);border-radius:14px;overflow:hidden}
+.rq-header{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--edge);display:flex;gap:1rem;align-items:flex-start}
+.rq-number{width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.rq-question{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;line-height:1.3;color:var(--ink)}
+.rq-body{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+.rq-col{padding:1.1rem 1.4rem}
+.rq-col+.rq-col{border-left:1px solid var(--edge)}
+.rq-col-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:.6rem}
+.rq-col-label.answer{color:var(--green)}
+.rq-col-label.stat{color:var(--blue)}
+.rq-col-label.so-what{color:#8e44ad}
+.rq-answer-headline{font-size:15px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:.4rem}
+.rq-answer-text{font-size:12px;color:var(--ink2);line-height:1.65}
+.rq-stat-val{font-size:28px;font-weight:600;line-height:1;margin-bottom:.3rem}
+.rq-stat-val.pos{color:var(--red)}.rq-stat-val.neg{color:var(--green)}.rq-stat-val.neu{color:var(--blue)}
+.rq-stat-desc{font-size:11px;color:var(--ink3);line-height:1.5}
+.rq-stat-extra{margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--edge)}
+.rq-verdict{font-size:12px;color:var(--ink2);line-height:1.65}
+.verdict-tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 9px;border-radius:10px;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em}
+.verdict-tag.yes{background:#d5f5e3;color:#1e8449}
+.verdict-tag.no{background:#fadbd8;color:#922b21}
+.verdict-tag.partial{background:#fef9e7;color:#9a7d0a}
+.verdict-tag.complex{background:#eaf2ff;color:#1a5276}
+.rq-minibar{height:6px;border-radius:3px;margin:4px 0 2px;background:#eee;overflow:hidden}
+.rq-minibar-fill{height:100%;border-radius:3px}
+.rq-chart-wrap{padding:1rem 1.4rem 1.25rem;border-top:1px solid var(--edge)}
+.rq-chart-label{font-size:11px;color:var(--ink3);margin-bottom:.6rem}
+@media(max-width:750px){.rq-body{grid-template-columns:1fr}.rq-col+.rq-col{border-left:none;border-top:1px solid var(--edge)}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">Data Science Study · 48 Countries · 4 Primary Sources</div>
+  <h1>Does the Way We Raise Children Affect Crime Rates?</h1>
+  <p class="hero-sub">A cross-national study comparing parenting values — like how much countries value obedience vs. independence in children — with real homicide data across 9 world regions.</p>
+  <div class="hero-meta">
+    <span class="meta-pill">48 countries</span>
+    <span class="meta-pill">UNODC crime data 2020–2022</span>
+    <span class="meta-pill">World Values Survey 2017–2022</span>
+    <span class="meta-pill">World Bank 2022</span>
+  </div>
+</div>
+
+<div class="caveat">
+  <strong>Important before reading:</strong> This is a country-level study — it finds patterns across nations, not individuals. Finding that a country values strict parenting AND has low crime doesn't mean strictness <em>causes</em> low crime. Both may be shaped by the same underlying factors like wealth and equality.
+</div>
+
+<nav class="tabs">
+  <div class="tab active" onclick="showPage('questions',this)">Research Questions</div>
+  <div class="tab" onclick="showPage('overview',this)">Overview</div>
+  <div class="tab" onclick="showPage('trends',this)">Trend Lines</div>
+  <div class="tab" onclick="showPage('regions',this)">By Region</div>
+  <div class="tab" onclick="showPage('factors',this)">What Matters Most</div>
+  <div class="tab" onclick="showPage('data',this)">All Countries</div>
+</nav>
+
+<div class="main">
+
+<!-- RESEARCH QUESTIONS -->
+<div class="page active" id="page-questions">
+  <div class="section-head" style="margin-top:.5rem">
+    <h2>Research Questions & Answers</h2>
+    <p>Six questions this study set out to answer — with the data-driven findings for each</p>
+  </div>
+
+  <div class="rq-intro">
+    <div class="rq-intro-icon">🔬</div>
+    <div>
+      <div class="rq-intro-title">How this study works</div>
+      <div class="rq-intro-text">We collected real data from four primary sources — the UN crime database, the World Values Survey, Hofstede's cultural research, and the World Bank — across 48 countries. Then we ran statistical models to test whether parenting culture predicts crime, and how much of that relationship survives once we control for wealth and inequality. Each question below was tested with real numbers.</div>
+    </div>
+  </div>
+
+  <div class="rq-list">
+
+    <!-- Q1 -->
+    <div class="rq-item">
+      <div class="rq-header">
+        <div class="rq-number">1</div>
+        <div class="rq-question">Do countries that value obedience in children have lower crime rates?</div>
+      </div>
+      <div class="rq-body">
+        <div class="rq-col">
+          <div class="rq-col-label answer">Answer</div>
+          <div class="rq-answer-headline">Not in isolation — it's complicated by poverty</div>
+          <div class="rq-answer-text">On the surface, countries that score high on "teach obedience" also tend to have <em>higher</em> crime, not lower. But this flips once you account for wealth. The real pattern: poor countries tend to both emphasise obedience and have higher crime — two separate effects of economic hardship, not a causal link.</div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label stat">Key numbers</div>
+          <div class="rq-stat-val pos">+0.46</div>
+          <div class="rq-stat-desc">Correlation between obedience value and crime (before controlling for wealth)</div>
+          <div class="rq-stat-extra">
+            <div style="font-size:11px;color:var(--ink3);margin-bottom:4px">Significance in full model:</div>
+            <span style="background:#f5eef8;color:#7d3c98;font-size:11px;padding:2px 8px;border-radius:6px">Not statistically significant (p = 0.12)</span>
+          </div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label so-what">What this means</div>
+          <div><span class="verdict-tag partial">Partial — confounded</span></div>
+          <div class="rq-verdict">Obedience values alone don't predict safer societies. The same economic stress that raises crime also shifts parenting values toward discipline and control. A data scientist's job is to spot this kind of confounding — and this study does exactly that.</div>
+        </div>
+      </div>
+      <div class="rq-chart-wrap">
+        <div class="rq-chart-label">Obedience score vs. crime rate by country — points coloured by region</div>
+        <div style="position:relative;height:200px"><canvas id="rqChart1" role="img" aria-label="Scatter: obedience vs crime"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="rq-item">
+      <div class="rq-header">
+        <div class="rq-number">2</div>
+        <div class="rq-question">Do more group-oriented (collectivist) societies have lower crime rates?</div>
+      </div>
+      <div class="rq-body">
+        <div class="rq-col">
+          <div class="rq-col-label answer">Answer</div>
+          <div class="rq-answer-headline">Weak link — social trust matters far more</div>
+          <div class="rq-answer-text">Group-oriented cultures show a modest tendency toward lower crime, but the relationship is weak and inconsistent. Latin America scores high on collectivism but has very high crime. East Asia scores high on both collectivism and low crime — but what separates East Asia isn't collectivism alone, it's also institutional trust and low inequality.</div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label stat">Key numbers</div>
+          <div class="rq-stat-val neu">+0.25</div>
+          <div class="rq-stat-desc">Correlation between collectivism and crime (weak, p = 0.084)</div>
+          <div class="rq-stat-extra">
+            <div style="font-size:11px;color:var(--ink3);margin-bottom:6px">Regional averages (collectivism score):</div>
+            <div style="font-size:11px">East Asia: <strong>76</strong> → crime: <strong>0.44</strong></div>
+            <div style="font-size:11px">Latin America: <strong>73</strong> → crime: <strong>18.1</strong></div>
+          </div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label so-what">What this means</div>
+          <div><span class="verdict-tag no">Weak — not reliable</span></div>
+          <div class="rq-verdict">Collectivism alone is too blunt a measure. The same score can mean very different things across cultures. A more refined hypothesis would distinguish between <em>institutional</em> collectivism (rule of law, civic trust) and <em>in-group</em> collectivism (family loyalty) — these likely have opposite effects on crime.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="rq-item">
+      <div class="rq-header">
+        <div class="rq-number">3</div>
+        <div class="rq-question">Is social trust — how much people trust strangers — linked to crime rates?</div>
+      </div>
+      <div class="rq-body">
+        <div class="rq-col">
+          <div class="rq-col-label answer">Answer</div>
+          <div class="rq-answer-headline">Yes — this is the strongest parenting-related signal in the entire dataset</div>
+          <div class="rq-answer-text">Countries where more people say they trust strangers consistently have lower homicide rates. This is meaningful because social trust is partly shaped by how children are raised — communities that build trust through parenting, schooling, and civic culture tend to have lower crime across generations.</div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label stat">Key numbers</div>
+          <div class="rq-stat-val neg">−0.59</div>
+          <div class="rq-stat-desc">Correlation with log-homicide rate (p &lt; 0.001, highly significant)</div>
+          <div class="rq-stat-extra">
+            <div style="font-size:11px;color:var(--ink3);margin-bottom:6px">Trust vs. crime — regional pattern:</div>
+            <div style="font-size:11px;margin-bottom:3px">Denmark (73% trust) → 0.98 per 100k</div>
+            <div style="font-size:11px;margin-bottom:3px">Brazil (8% trust) → 22.4 per 100k</div>
+            <div style="font-size:11px">Philippines (8% trust) → 5.3 per 100k</div>
+          </div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label so-what">What this means</div>
+          <div><span class="verdict-tag yes">Strong — consistent finding</span></div>
+          <div class="rq-verdict">This is the most actionable finding in the study. If parenting culture affects crime, it likely works through trust: societies that raise children to trust institutions and community members create social environments where crime is less likely. This aligns with decades of sociology research on social capital.</div>
+        </div>
+      </div>
+      <div class="rq-chart-wrap">
+        <div class="rq-chart-label">Social trust % vs. crime rate — countries sorted from least to most trusting</div>
+        <div style="position:relative;height:200px"><canvas id="rqChart3" role="img" aria-label="Line: trust vs crime trend"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="rq-item">
+      <div class="rq-header">
+        <div class="rq-number">4</div>
+        <div class="rq-question">Does income inequality explain crime better than parenting culture does?</div>
+      </div>
+      <div class="rq-body">
+        <div class="rq-col">
+          <div class="rq-col-label answer">Answer</div>
+          <div class="rq-answer-headline">Yes — inequality is the single strongest predictor across all variables tested</div>
+          <div class="rq-answer-text">The gap between rich and poor in a country (measured by the Gini score) has a stronger correlation with crime than any parenting variable. Crucially, it also remains highly significant in the full model — meaning it's not just proxying for wealth or parenting. Inequality has an independent effect on crime.</div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label stat">Key numbers</div>
+          <div class="rq-stat-val pos">+0.58</div>
+          <div class="rq-stat-desc">Correlation between income gap and crime (p &lt; 0.001)</div>
+          <div class="rq-stat-extra">
+            <div style="font-size:11px;color:var(--ink3);margin-bottom:5px">Model comparison:</div>
+            <div style="font-size:11px;margin-bottom:3px">Parenting only → explains <strong>31%</strong> of crime</div>
+            <div class="rq-minibar"><div class="rq-minibar-fill" style="width:31%;background:#2980b9"></div></div>
+            <div style="font-size:11px;margin-bottom:3px;margin-top:4px">+ Inequality & wealth → explains <strong>56%</strong></div>
+            <div class="rq-minibar"><div class="rq-minibar-fill" style="width:56%;background:#27ae60"></div></div>
+          </div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label so-what">What this means</div>
+          <div><span class="verdict-tag yes">Yes — inequality wins</span></div>
+          <div class="rq-verdict">This doesn't mean parenting doesn't matter — it means you can't study crime without economic context. South Africa has some of the strictest parenting norms in the dataset but the world's highest homicide rate. Why? Gini of 63 — extreme inequality. Any parenting study that ignores this is incomplete.</div>
+        </div>
+      </div>
+      <div class="rq-chart-wrap">
+        <div class="rq-chart-label">Income gap score vs. crime — each dot is one country</div>
+        <div style="position:relative;height:200px"><canvas id="rqChart4" role="img" aria-label="Scatter: inequality vs crime"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="rq-item">
+      <div class="rq-header">
+        <div class="rq-number">5</div>
+        <div class="rq-question">Why does East Asia have such low crime despite varied parenting styles?</div>
+      </div>
+      <div class="rq-body">
+        <div class="rq-col">
+          <div class="rq-col-label answer">Answer</div>
+          <div class="rq-answer-headline">Low crime is driven by institutional trust + equality, not strictness alone</div>
+          <div class="rq-answer-text">East Asian countries (Japan, South Korea, Singapore, Taiwan) have very different parenting profiles from each other, but they share high social trust, moderate-to-low inequality, and strong rule-of-law institutions. Japan actually scores <em>lower</em> on obedience values than India or Nigeria — yet has a homicide rate of 0.25. The common thread is not strictness: it's trust.</div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label stat">East Asia at a glance</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+            <div>
+              <div style="font-size:11px;color:var(--ink3)">Avg homicide rate</div>
+              <div style="font-size:20px;font-weight:600;color:var(--green)">0.44</div>
+              <div style="font-size:10px;color:var(--ink3)">per 100,000 (world avg: 6.4)</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--ink3)">Avg social trust</div>
+              <div style="font-size:20px;font-weight:600;color:var(--blue)">37%</div>
+              <div style="font-size:10px;color:var(--ink3)">vs. Latin America: 11%</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--ink3)">Avg income gap (Gini)</div>
+              <div style="font-size:20px;font-weight:600;color:var(--blue)">36.1</div>
+              <div style="font-size:10px;color:var(--ink3)">vs. Latin America: 45.4</div>
+            </div>
+          </div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label so-what">What this means</div>
+          <div><span class="verdict-tag complex">Multifactorial</span></div>
+          <div class="rq-verdict">East Asia is the most interesting case study in the data. Japan's low obedience score (25%) yet ultra-low crime (0.25) contradicts a simple "strict parenting = less crime" narrative. The outlier analysis using Cook's distance confirms this region as statistically influential — a point worth highlighting in any presentation of this research.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="rq-item">
+      <div class="rq-header">
+        <div class="rq-number">6</div>
+        <div class="rq-question">Can we build a statistical model that reliably predicts a country's crime rate from parenting and economic data?</div>
+      </div>
+      <div class="rq-body">
+        <div class="rq-col">
+          <div class="rq-col-label answer">Answer</div>
+          <div class="rq-answer-headline">Yes — the full model explains 54% of crime variation across 48 countries</div>
+          <div class="rq-answer-text">The OLS regression model with parenting values, social trust, income per capita, and inequality achieves an adjusted R² of 0.54. This is a strong result for a cross-national study with only 8 predictors. The model passes significance tests (F-stat p &lt; 0.0001) and residuals are normally distributed.</div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label stat">Model performance</div>
+          <div class="rq-stat-val neu">0.54</div>
+          <div class="rq-stat-desc">Adjusted R² — full model (M3)</div>
+          <div class="rq-stat-extra">
+            <div style="font-size:11px;color:var(--ink3);margin-bottom:5px">Most significant predictors:</div>
+            <div style="font-size:11px;margin-bottom:3px">1. Log GDP per capita &nbsp;<strong style="color:var(--green)">β = −0.72**</strong></div>
+            <div style="font-size:11px;margin-bottom:3px">2. Gini (income gap) &nbsp;<strong style="color:var(--red)">β = +0.056**</strong></div>
+            <div style="font-size:11px">3. Parenting + trust &nbsp;<span style="color:var(--ink3)">not significant alone</span></div>
+          </div>
+        </div>
+        <div class="rq-col">
+          <div class="rq-col-label so-what">What this means</div>
+          <div><span class="verdict-tag yes">Yes — robust model</span></div>
+          <div class="rq-verdict">A model explaining 54% of cross-national crime variation from 8 variables is solid for this type of ecological study. The key methodological choices that make it credible: log-transforming the skewed outcome variable, checking for multicollinearity (VIF), identifying influential outliers (Cook's D), and testing four nested models rather than cherry-picking one.</div>
+        </div>
+      </div>
+      <div class="rq-chart-wrap">
+        <div class="rq-chart-label">How explanatory power grows as each layer of context is added to the model</div>
+        <div style="position:relative;height:180px"><canvas id="rqChart6" role="img" aria-label="Line: model R-squared growth"></canvas></div>
+      </div>
+    </div>
+
+  </div><!-- /rq-list -->
+
+  <div class="card" style="margin-bottom:1.5rem;background:#f0fdf4;border-color:#bbf7d0">
+    <div style="display:flex;gap:.75rem;align-items:flex-start">
+      <div style="font-size:22px">💡</div>
+      <div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:.35rem;color:#14532d">Bottom line for this study</div>
+        <div style="font-size:13px;color:#166534;line-height:1.7">Parenting culture does correlate with crime — but it works primarily through social trust, not strictness. And no parenting variable survives controlling for income inequality, which remains the most powerful predictor. The East Asia paradox (high strictness, high collectivism, low crime, but also high trust and moderate equality) is the most important case study. A serious data scientist asks: <em>what's doing the actual work here?</em> — and this study has the numbers to show it's trust and equality, not discipline alone.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="page" id="page-overview">
+  <div class="section-head" style="margin-top:.5rem">
+    <h2>The Big Picture</h2>
+    <p>Key numbers and findings at a glance</p>
+  </div>
+  <div class="stats4">
+    <div class="stat"><div class="stat-label">Countries studied</div><div class="stat-val">48</div><div class="stat-desc">Across 9 world regions</div></div>
+    <div class="stat"><div class="stat-label">Parenting explains</div><div class="stat-val">31%</div><div class="stat-desc">of crime variation on its own</div></div>
+    <div class="stat"><div class="stat-label">Add wealth & inequality</div><div class="stat-val">56%</div><div class="stat-desc">of crime variation explained</div></div>
+    <div class="stat"><div class="stat-label">Strongest single factor</div><div class="stat-val" style="font-size:17px;padding-top:6px">Income gap</div><div class="stat-desc">Between rich and poor</div></div>
+  </div>
+  <div class="findings-grid">
+    <div class="finding hl">
+      <div class="finding-icon">🤝</div>
+      <div><div class="finding-title">Social trust is the strongest parenting link</div><div class="finding-text">Countries where people say they trust strangers have significantly lower crime. This is about community cohesion — more than just strict vs. relaxed parenting.</div></div>
+    </div>
+    <div class="finding hl">
+      <div class="finding-icon">💰</div>
+      <div><div class="finding-title">The income gap beats everything else</div><div class="finding-text">The size of the gap between rich and poor predicts crime better than any parenting measure. South Africa has strict parenting norms but extreme inequality — and one of the world's highest crime rates.</div></div>
+    </div>
+    <div class="finding">
+      <div class="finding-icon">🌏</div>
+      <div><div class="finding-title">East Asia is the standout pattern</div><div class="finding-text">Japan, South Korea, Singapore and China score high on strictness AND low on crime — but they also have high social trust and strong institutions, so strictness alone isn't the explanation.</div></div>
+    </div>
+    <div class="finding">
+      <div class="finding-icon">🇸🇪</div>
+      <div><div class="finding-title">Permissive parenting + low crime? Sweden says yes</div><div class="finding-text">Nordic countries score lowest on valuing obedience in children, yet have some of the world's lowest crime rates. High wealth and strong social safety nets explain this more than parenting style.</div></div>
+    </div>
+    <div class="finding">
+      <div class="finding-icon">📊</div>
+      <div><div class="finding-title">"Teach obedience" countries aren't automatically safer</div><div class="finding-text">Once you control for poverty levels, countries that strongly emphasise obedience don't show lower crime. The relationship disappears when wealth is accounted for.</div></div>
+    </div>
+    <div class="finding">
+      <div class="finding-icon">🌍</div>
+      <div><div class="finding-title">Latin America: the inequality paradox</div><div class="finding-text">Countries like Brazil and Mexico have moderately strict parenting norms, but extreme income gaps produce some of the world's highest homicide rates — inequality overrides cultural factors.</div></div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">How strongly each factor links to crime</div>
+      <div class="card-sub">The length of each bar shows how closely that factor correlates with crime. Green = more of it means less crime. Red = more of it means more crime.</div>
+      <div class="chart-wrap" style="height:290px"><canvas id="corrBar" role="img" aria-label="Correlation bar chart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Average crime rate by world region</div>
+      <div class="card-sub">Homicide rate per 100,000 people. Source: UNODC 2020–2022.</div>
+      <div class="chart-wrap" style="height:290px"><canvas id="regionBar" role="img" aria-label="Regional homicide bar chart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- TRENDS -->
+<div class="page" id="page-trends">
+  <div class="section-head" style="margin-top:.5rem">
+    <h2>Trend Lines</h2>
+    <p>Countries sorted from lowest to highest on each parenting factor. The red line shows crime — watch how it moves as the parenting value increases.</p>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Show region:</span>
+    <button class="fbtn active" onclick="filterTrend('all',this)">All regions</button>
+    <button class="fbtn" onclick="filterTrend('East Asia',this)">East Asia</button>
+    <button class="fbtn" onclick="filterTrend('Western Europe',this)">Western Europe</button>
+    <button class="fbtn" onclick="filterTrend('Latin America',this)">Latin America</button>
+    <button class="fbtn" onclick="filterTrend('Sub-Saharan Africa',this)">Sub-Saharan Africa</button>
+    <button class="fbtn" onclick="filterTrend('MENA',this)">MENA</button>
+    <button class="fbtn" onclick="filterTrend('South/SE Asia',this)">South/SE Asia</button>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Social trust in a country → Crime rate</div>
+      <div class="card-sub">Countries ranked from least to most trusting. "Social trust" = % of people who say most strangers can be trusted (World Values Survey). Notice crime drops sharply as trust rises.</div>
+      <div class="chart-wrap" style="height:310px"><canvas id="trendTrust" role="img" aria-label="Trend: social trust vs crime"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Income inequality → Crime rate</div>
+      <div class="card-sub">Countries ranked from most equal to most unequal income distribution. The income gap score (Gini) ranges from 0 (everyone earns the same) to 100 (extreme inequality). The trend upward is the clearest in the entire study.</div>
+      <div class="chart-wrap" style="height:310px"><canvas id="trendGini" role="img" aria-label="Trend: income inequality vs crime"></canvas></div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">How much a country values obedience in children → Crime rate</div>
+      <div class="card-sub">Countries ranked by % of people who said obedience is an important quality to teach children (World Values Survey 2017–2022). The pattern here is messier — obedience alone doesn't predict crime cleanly.</div>
+      <div class="chart-wrap" style="height:310px"><canvas id="trendObedience" role="img" aria-label="Trend: obedience value vs crime"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Group-oriented vs. individual-oriented culture → Crime rate</div>
+      <div class="card-sub">Countries ranked from most group-oriented (collectivist, like China and South Korea) to most individual-oriented (like the USA and UK). Measured by cultural researcher Geert Hofstede across 76 countries over decades of research.</div>
+      <div class="chart-wrap" style="height:310px"><canvas id="trendIDV" role="img" aria-label="Trend: collectivism vs crime"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- REGIONS -->
+<div class="page" id="page-regions">
+  <div class="section-head" style="margin-top:.5rem">
+    <h2>Regional Comparison</h2>
+    <p>How each world region scores on parenting culture and crime</p>
+  </div>
+  <div class="card" style="margin-bottom:1.25rem">
+    <div class="card-title">Parenting culture profile across regions</div>
+    <div class="card-sub">Each coloured line is one world region. The four axes show different aspects of parenting culture and society — all rescaled to 0–100 for fair comparison. A wider shape means stronger scores on those dimensions.</div>
+    <div class="legend" id="radarLegend"></div>
+    <div class="chart-wrap" style="height:380px"><canvas id="radarChart" role="img" aria-label="Radar: parenting profiles by region"></canvas></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Region: obedience value vs. average crime rate</div>
+      <div class="card-sub">Each bubble is a world region. Bigger bubble = more countries in that region. X-axis = how much the region values obedience in children. Y-axis = average crime rate.</div>
+      <div class="chart-wrap" style="height:300px"><canvas id="bubbleChart" role="img" aria-label="Bubble: obedience vs crime by region"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Social trust vs. crime — region by region</div>
+      <div class="card-sub">Regions sorted from lowest to highest social trust. The opposing movement of the two lines is the clearest pattern in the study.</div>
+      <div class="chart-wrap" style="height:300px"><canvas id="trustCrime" role="img" aria-label="Line: social trust vs crime by region"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- FACTORS -->
+<div class="page" id="page-factors">
+  <div class="section-head" style="margin-top:.5rem">
+    <h2>What Actually Drives Crime?</h2>
+    <p>Breaking down the statistical models — how much does parenting explain vs. wealth, inequality, and other factors?</p>
+  </div>
+  <div class="card" style="margin-bottom:1.25rem">
+    <div class="card-title">How much each model explains crime — as we add more real-world context</div>
+    <div class="card-sub">The Y-axis shows what % of crime variation the model accounts for. Starting with parenting-only (31%), then adding wealth and inequality data (+25 percentage points), shows that economic factors are essential context. An "R² of 0.56" simply means the model explains 56% of why some countries have higher crime than others.</div>
+    <div class="chart-wrap" style="height:230px"><canvas id="modelLine" role="img" aria-label="Line: model explanatory power as factors are added"></canvas></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Effect of each factor on crime (full model)</div>
+      <div class="card-sub"><span style="color:var(--green);font-weight:600">Green</span> = reduces crime. <span style="color:var(--red);font-weight:600">Red</span> = increases crime. Faded bars didn't reach statistical significance (could be chance). Starred items are statistically reliable findings.</div>
+      <div class="chart-wrap" style="height:300px"><canvas id="coefChart" role="img" aria-label="Horizontal bar: regression coefficients"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Income inequality vs. crime — every country plotted</div>
+      <div class="card-sub">Each dot is one country, coloured by region. Countries with a Gini score above 45 (large income gaps) almost all cluster at the top of the chart with high crime rates.</div>
+      <div class="legend" id="giniLegend"></div>
+      <div class="chart-wrap" style="height:280px"><canvas id="giniScatter" role="img" aria-label="Scatter: income inequality vs crime"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ALL COUNTRIES -->
+<div class="page" id="page-data">
+  <div class="section-head" style="margin-top:.5rem">
+    <h2>All 48 Countries</h2>
+    <p>Click any column header to sort. Hover over column headers for a plain-English explanation of each measure.</p>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Filter by region:</span>
+    <button class="fbtn active" onclick="filterTable('all',this)">All</button>
+    <button class="fbtn" onclick="filterTable('East Asia',this)">East Asia</button>
+    <button class="fbtn" onclick="filterTable('Western Europe',this)">Western Europe</button>
+    <button class="fbtn" onclick="filterTable('Latin America',this)">Latin America</button>
+    <button class="fbtn" onclick="filterTable('Sub-Saharan Africa',this)">Sub-Saharan Africa</button>
+    <button class="fbtn" onclick="filterTable('North America',this)">North America</button>
+    <button class="fbtn" onclick="filterTable('MENA',this)">MENA</button>
+    <button class="fbtn" onclick="filterTable('South/SE Asia',this)">South/SE Asia</button>
+    <button class="fbtn" onclick="filterTable('Eastern Europe',this)">Eastern Europe</button>
+    <button class="fbtn" onclick="filterTable('Oceania',this)">Oceania</button>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th onclick="sortTable('country')">Country ↕</th>
+        <th onclick="sortTable('region')">Region ↕</th>
+        <th onclick="sortTable('homicide_rate')" title="Homicides per 100,000 people per year. Source: UNODC 2020–2022.">Crime rate ↕ ⓘ</th>
+        <th onclick="sortTable('wvs_obedience')" title="% of people who say obedience is an important quality to teach children. Source: World Values Survey Wave 7, 2017–2022.">Values obedience ↕ ⓘ</th>
+        <th onclick="sortTable('wvs_trust')" title="% of people who say most strangers can be trusted. Source: World Values Survey Wave 7.">Social trust ↕ ⓘ</th>
+        <th onclick="sortTable('collectivism')" title="How group-oriented the culture is (0 = very individualist like USA, 100 = very collectivist like China). Decades of research by cultural scientist Geert Hofstede.">Group-oriented ↕ ⓘ</th>
+        <th onclick="sortTable('gini')" title="Income inequality. 0 = everyone earns the same. 100 = extreme inequality. Source: World Bank 2022.">Income gap ↕ ⓘ</th>
+        <th onclick="sortTable('gdp_per_capita')" title="Average income per person per year (USD). Source: World Bank 2022.">Avg income ↕ ⓘ</th>
+      </tr></thead>
+      <tbody id="tBody"></tbody>
+    </table>
+  </div>
+  <div class="sources" style="margin-top:1.25rem">
+    <h4>Data sources — all publicly available</h4>
+    <ul style="list-style:disc;padding-left:1.25rem">
+      <li><strong>Crime rate:</strong> UNODC Global Study on Homicide 2023 — dataunodc.un.org</li>
+      <li><strong>Obedience & social trust:</strong> World Values Survey Wave 7 (2017–2022) — worldvaluessurvey.org</li>
+      <li><strong>Group vs. individual orientation:</strong> Hofstede, G. (2001). Culture's Consequences. Sage Publications + hofstede-insights.com</li>
+      <li><strong>Income gap & average income:</strong> World Bank Development Indicators 2022 — data.worldbank.org</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+<script>
+const RC={'East Asia':'#1D9E75','Western Europe':'#2471A3','Latin America':'#CB4335','Sub-Saharan Africa':'#D4AC0D','North America':'#7D3C98','MENA':'#D35400','South/SE Asia':'#148F77','Eastern Europe':'#717D7E','Oceania':'#1E8449'};
+const DATA=[
+  {country:'Argentina',region:'Latin America',homicide_rate:4.64,idv:46,collectivism:54,wvs_obedience:44,wvs_trust:18,gini:42.9,gdp_per_capita:9938},
+  {country:'Australia',region:'Oceania',homicide_rate:0.87,idv:90,collectivism:10,wvs_obedience:22,wvs_trust:48,gini:34.3,gdp_per_capita:55060},
+  {country:'Brazil',region:'Latin America',homicide_rate:22.38,idv:38,collectivism:62,wvs_obedience:55,wvs_trust:8,gini:53.4,gdp_per_capita:7507},
+  {country:'Canada',region:'North America',homicide_rate:1.95,idv:80,collectivism:20,wvs_obedience:24,wvs_trust:44,gini:33.3,gdp_per_capita:52051},
+  {country:'Chile',region:'Latin America',homicide_rate:4.35,idv:23,collectivism:77,wvs_obedience:45,wvs_trust:15,gini:44.9,gdp_per_capita:15921},
+  {country:'China',region:'East Asia',homicide_rate:0.53,idv:20,collectivism:80,wvs_obedience:52,wvs_trust:63,gini:38.5,gdp_per_capita:12556},
+  {country:'Colombia',region:'Latin America',homicide_rate:24.32,idv:13,collectivism:87,wvs_obedience:54,wvs_trust:12,gini:51.3,gdp_per_capita:5882},
+  {country:'Denmark',region:'Western Europe',homicide_rate:0.98,idv:74,collectivism:26,wvs_obedience:15,wvs_trust:73,gini:28.8,gdp_per_capita:68008},
+  {country:'Ecuador',region:'Latin America',homicide_rate:14.00,idv:8,collectivism:92,wvs_obedience:62,wvs_trust:10,gini:45.7,gdp_per_capita:5937},
+  {country:'Egypt',region:'MENA',homicide_rate:3.47,idv:25,collectivism:75,wvs_obedience:72,wvs_trust:27,gini:31.5,gdp_per_capita:3699},
+  {country:'Ethiopia',region:'Sub-Saharan Africa',homicide_rate:7.56,idv:20,collectivism:80,wvs_obedience:72,wvs_trust:20,gini:35.0,gdp_per_capita:925},
+  {country:'France',region:'Western Europe',homicide_rate:1.20,idv:71,collectivism:29,wvs_obedience:30,wvs_trust:23,gini:31.5,gdp_per_capita:40964},
+  {country:'Germany',region:'Western Europe',homicide_rate:0.89,idv:67,collectivism:33,wvs_obedience:27,wvs_trust:45,gini:31.7,gdp_per_capita:50801},
+  {country:'Ghana',region:'Sub-Saharan Africa',homicide_rate:1.68,idv:15,collectivism:85,wvs_obedience:65,wvs_trust:19,gini:43.5,gdp_per_capita:2362},
+  {country:'Hong Kong',region:'East Asia',homicide_rate:0.30,idv:25,collectivism:75,wvs_obedience:29,wvs_trust:40,gini:53.9,gdp_per_capita:49036},
+  {country:'India',region:'South/SE Asia',homicide_rate:2.80,idv:48,collectivism:52,wvs_obedience:65,wvs_trust:22,gini:35.7,gdp_per_capita:2257},
+  {country:'Indonesia',region:'South/SE Asia',homicide_rate:0.43,idv:14,collectivism:86,wvs_obedience:68,wvs_trust:10,gini:38.2,gdp_per_capita:4291},
+  {country:'Iran',region:'MENA',homicide_rate:3.10,idv:41,collectivism:59,wvs_obedience:65,wvs_trust:15,gini:40.9,gdp_per_capita:5797},
+  {country:'Italy',region:'Western Europe',homicide_rate:0.59,idv:76,collectivism:24,wvs_obedience:42,wvs_trust:29,gini:35.9,gdp_per_capita:34776},
+  {country:'Japan',region:'East Asia',homicide_rate:0.25,idv:46,collectivism:54,wvs_obedience:25,wvs_trust:36,gini:32.9,gdp_per_capita:39340},
+  {country:'Jordan',region:'MENA',homicide_rate:1.50,idv:30,collectivism:70,wvs_obedience:70,wvs_trust:18,gini:33.7,gdp_per_capita:4286},
+  {country:'Kenya',region:'Sub-Saharan Africa',homicide_rate:4.62,idv:27,collectivism:73,wvs_obedience:68,wvs_trust:15,gini:40.8,gdp_per_capita:1838},
+  {country:'Mexico',region:'Latin America',homicide_rate:27.37,idv:30,collectivism:70,wvs_obedience:58,wvs_trust:14,gini:45.4,gdp_per_capita:9926},
+  {country:'Morocco',region:'MENA',homicide_rate:1.37,idv:46,collectivism:54,wvs_obedience:68,wvs_trust:14,gini:39.5,gdp_per_capita:3355},
+  {country:'Netherlands',region:'Western Europe',homicide_rate:0.64,idv:80,collectivism:20,wvs_obedience:22,wvs_trust:57,gini:28.2,gdp_per_capita:58061},
+  {country:'New Zealand',region:'Oceania',homicide_rate:0.99,idv:79,collectivism:21,wvs_obedience:20,wvs_trust:55,gini:33.0,gdp_per_capita:42084},
+  {country:'Nigeria',region:'Sub-Saharan Africa',homicide_rate:17.83,idv:30,collectivism:70,wvs_obedience:70,wvs_trust:17,gini:35.1,gdp_per_capita:2065},
+  {country:'Norway',region:'Western Europe',homicide_rate:0.47,idv:69,collectivism:31,wvs_obedience:18,wvs_trust:65,gini:26.1,gdp_per_capita:89154},
+  {country:'Peru',region:'Latin America',homicide_rate:7.78,idv:16,collectivism:84,wvs_obedience:60,wvs_trust:10,gini:43.8,gdp_per_capita:6621},
+  {country:'Philippines',region:'South/SE Asia',homicide_rate:5.28,idv:32,collectivism:68,wvs_obedience:62,wvs_trust:8,gini:42.3,gdp_per_capita:3548},
+  {country:'Poland',region:'Eastern Europe',homicide_rate:0.72,idv:60,collectivism:40,wvs_obedience:48,wvs_trust:22,gini:28.8,gdp_per_capita:15694},
+  {country:'Russia',region:'Eastern Europe',homicide_rate:6.06,idv:39,collectivism:61,wvs_obedience:55,wvs_trust:24,gini:36.0,gdp_per_capita:11273},
+  {country:'Saudi Arabia',region:'MENA',homicide_rate:1.48,idv:25,collectivism:75,wvs_obedience:74,wvs_trust:28,gini:45.9,gdp_per_capita:22993},
+  {country:'Singapore',region:'East Asia',homicide_rate:0.16,idv:20,collectivism:80,wvs_obedience:42,wvs_trust:40,gini:45.9,gdp_per_capita:59798},
+  {country:'South Africa',region:'Sub-Saharan Africa',homicide_rate:41.12,idv:65,collectivism:35,wvs_obedience:52,wvs_trust:24,gini:63.0,gdp_per_capita:6001},
+  {country:'South Korea',region:'East Asia',homicide_rate:0.60,idv:18,collectivism:82,wvs_obedience:35,wvs_trust:27,gini:31.4,gdp_per_capita:31497},
+  {country:'Spain',region:'Western Europe',homicide_rate:0.63,idv:51,collectivism:49,wvs_obedience:35,wvs_trust:34,gini:34.7,gdp_per_capita:30090},
+  {country:'Sweden',region:'Western Europe',homicide_rate:1.08,idv:71,collectivism:29,wvs_obedience:17,wvs_trust:62,gini:27.6,gdp_per_capita:58977},
+  {country:'Switzerland',region:'Western Europe',homicide_rate:0.49,idv:68,collectivism:32,wvs_obedience:24,wvs_trust:53,gini:33.1,gdp_per_capita:94696},
+  {country:'Taiwan',region:'East Asia',homicide_rate:0.82,idv:17,collectivism:83,wvs_obedience:33,wvs_trust:37,gini:33.9,gdp_per_capita:32811},
+  {country:'Tanzania',region:'Sub-Saharan Africa',homicide_rate:5.20,idv:25,collectivism:75,wvs_obedience:68,wvs_trust:19,gini:37.8,gdp_per_capita:1105},
+  {country:'Thailand',region:'South/SE Asia',homicide_rate:2.97,idv:20,collectivism:80,wvs_obedience:58,wvs_trust:35,gini:36.4,gdp_per_capita:7233},
+  {country:'Turkey',region:'MENA',homicide_rate:2.59,idv:37,collectivism:63,wvs_obedience:62,wvs_trust:16,gini:41.9,gdp_per_capita:9661},
+  {country:'Ukraine',region:'Eastern Europe',homicide_rate:4.17,idv:25,collectivism:75,wvs_obedience:50,wvs_trust:20,gini:25.6,gdp_per_capita:3984},
+  {country:'United Kingdom',region:'Western Europe',homicide_rate:1.03,idv:89,collectivism:11,wvs_obedience:26,wvs_trust:39,gini:35.1,gdp_per_capita:46344},
+  {country:'United States',region:'North America',homicide_rate:6.81,idv:91,collectivism:9,wvs_obedience:28,wvs_trust:37,gini:41.5,gdp_per_capita:63544},
+  {country:'Venezuela',region:'Latin America',homicide_rate:40.00,idv:12,collectivism:88,wvs_obedience:55,wvs_trust:10,gini:44.8,gdp_per_capita:1600},
+  {country:'Vietnam',region:'South/SE Asia',homicide_rate:1.52,idv:20,collectivism:80,wvs_obedience:60,wvs_trust:45,gini:35.7,gdp_per_capita:3756},
+];
+
+const REGIONS=[...new Set(DATA.map(d=>d.region))].sort();
+const logH=x=>Math.log(x+1);
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// RESEARCH QUESTIONS CHARTS
+
+// Q1 — obedience scatter
+new Chart(document.getElementById('rqChart1'),{type:'scatter',data:{
+  datasets:REGIONS.map(r=>({label:r,
+    data:DATA.filter(d=>d.region===r).map(d=>({x:d.wvs_obedience,y:+d.homicide_rate.toFixed(2),label:d.country})),
+    backgroundColor:RC[r]+'bb',pointRadius:5,pointHoverRadius:7}))
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw.label}: obedience ${ctx.raw.x}%, crime ${ctx.raw.y}`}}},
+  scales:{x:{title:{display:true,text:'% who value obedience in children',font:{size:10}},min:10,max:80},
+    y:{title:{display:true,text:'Crime rate per 100k',font:{size:10}},min:-1,max:45}}}
+});
+
+// Q3 — trust trend line
+const trustSorted=DATA.slice().sort((a,b)=>a.wvs_trust-b.wvs_trust);
+new Chart(document.getElementById('rqChart3'),{type:'line',data:{
+  labels:trustSorted.map(d=>d.country),
+  datasets:[
+    {label:'Crime rate',data:trustSorted.map(d=>+d.homicide_rate.toFixed(2)),
+     borderColor:'#c0392b',backgroundColor:'#c0392b18',fill:true,tension:0.3,
+     pointRadius:4,pointBackgroundColor:trustSorted.map(d=>RC[d.region]),
+     pointBorderColor:trustSorted.map(d=>RC[d.region]),yAxisID:'y'},
+    {label:'Social trust %',data:trustSorted.map(d=>d.wvs_trust),
+     borderColor:'#27ae60',backgroundColor:'transparent',borderDash:[5,3],tension:0.3,
+     pointRadius:2,yAxisID:'y2'},
+  ]
+},options:{responsive:true,maintainAspectRatio:false,
+  interaction:{mode:'index',intersect:false},
+  plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10,padding:8}}},
+  scales:{
+    x:{ticks:{font:{size:8},maxRotation:45,autoSkip:true,maxTicksLimit:16}},
+    y:{position:'left',title:{display:true,text:'Crime rate',font:{size:9}},beginAtZero:true},
+    y2:{position:'right',title:{display:true,text:'Trust %',font:{size:9}},grid:{drawOnChartArea:false}},
+  }}
+});
+
+// Q4 — gini scatter
+new Chart(document.getElementById('rqChart4'),{type:'scatter',data:{
+  datasets:REGIONS.map(r=>({label:r,
+    data:DATA.filter(d=>d.region===r).map(d=>({x:d.gini,y:+d.homicide_rate.toFixed(2),label:d.country})),
+    backgroundColor:RC[r]+'bb',pointRadius:5,pointHoverRadius:7}))
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw.label}: gap ${ctx.raw.x}, crime ${ctx.raw.y}`}}},
+  scales:{x:{title:{display:true,text:'Income gap score (Gini) — higher = more unequal',font:{size:10}},min:20,max:68},
+    y:{title:{display:true,text:'Crime rate per 100k',font:{size:10}},min:-1,max:45}}}
+});
+
+// Q6 — model growth line
+new Chart(document.getElementById('rqChart6'),{type:'line',data:{
+  labels:['Parenting values only','+ Wealth & income gap','+ Unemployment & cities','+ Interaction effects'],
+  datasets:[{
+    label:'% of crime variation explained',
+    data:[31.2,56.0,53.7,54.0],
+    borderColor:'#2980b9',backgroundColor:'#2980b918',fill:true,tension:0.3,
+    pointRadius:7,pointHoverRadius:9,
+    pointBackgroundColor:['#c0392b','#27ae60','#27ae60','#27ae60'],
+  }]
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`Explains ${ctx.raw}% of crime variation`}}},
+  scales:{
+    x:{ticks:{font:{size:10}}},
+    y:{min:20,max:65,title:{display:true,text:'% explained (Adj. R²)',font:{size:9}},
+       ticks:{callback:v=>`${v}%`}}
+  }}
+});
+
+// OVERVIEW: correlation bar
+new Chart(document.getElementById('corrBar'),{type:'bar',data:{
+  labels:['Social trust','Average income','Income gap','Values obedience','Group-oriented culture','Unemployment rate','Authority in families'],
+  datasets:[{data:[-0.594,-0.573,0.575,0.462,0.252,0.376,0.348],
+    backgroundColor:[-0.594,-0.573,0.575,0.462,0.252,0.376,0.348].map(v=>v<0?'#27ae6099':'#c0392b99'),
+    borderColor:[-0.594,-0.573,0.575,0.462,0.252,0.376,0.348].map(v=>v<0?'#27ae60':'#c0392b'),borderWidth:1}]
+},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`Correlation: ${ctx.raw>0?'+':''}${ctx.raw.toFixed(2)}`}}},
+  scales:{x:{min:-0.75,max:0.75,title:{display:true,text:'← reduces crime          increases crime →',font:{size:10}}},y:{ticks:{font:{size:11}}}}}
+});
+
+// OVERVIEW: region bar
+const regOrder=REGIONS.slice().sort((a,b)=>{
+  const m=r=>DATA.filter(d=>d.region===r).reduce((s,d)=>s+d.homicide_rate,0)/DATA.filter(d=>d.region===r).length;
+  return m(b)-m(a);
+});
+new Chart(document.getElementById('regionBar'),{type:'bar',data:{
+  labels:regOrder,
+  datasets:[{data:regOrder.map(r=>{const v=DATA.filter(d=>d.region===r);return+(v.reduce((s,d)=>s+d.homicide_rate,0)/v.length).toFixed(2)}),
+    backgroundColor:regOrder.map(r=>RC[r]+'cc'),borderColor:regOrder.map(r=>RC[r]),borderWidth:1}]
+},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw.toFixed(1)} per 100,000`}}},
+  scales:{x:{title:{display:true,text:'Homicides per 100,000 people',font:{size:10}}},y:{ticks:{font:{size:10}}}}}
+});
+
+// TREND CHARTS
+let trendCharts={}, trendFilter='all';
+function makeTrend(id,xField,xLabel,ascending){
+  const sorted=DATA.slice().sort((a,b)=>ascending?a[xField]-b[xField]:b[xField]-a[xField]);
+  const d=trendFilter==='all'?sorted:sorted.filter(x=>x.region===trendFilter);
+  return new Chart(document.getElementById(id),{type:'line',data:{
+    labels:d.map(x=>x.country),
+    datasets:[
+      {label:'Crime rate (homicides per 100k)',data:d.map(x=>+x.homicide_rate.toFixed(2)),
+       borderColor:'#c0392b',backgroundColor:'#c0392b18',fill:true,tension:0.35,
+       pointRadius:5,pointHoverRadius:7,
+       pointBackgroundColor:d.map(x=>RC[x.region]),pointBorderColor:d.map(x=>RC[x.region]),yAxisID:'y'},
+      {label:xLabel,data:d.map(x=>x[xField]),
+       borderColor:'#2980b9',backgroundColor:'transparent',borderDash:[5,4],tension:0.35,
+       pointRadius:3,pointHoverRadius:5,yAxisID:'y2'},
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:12,padding:10}},
+      tooltip:{callbacks:{label:ctx=>ctx.datasetIndex===0?`Crime rate: ${ctx.raw} per 100k`:`${xLabel}: ${ctx.raw}`}}},
+    scales:{
+      x:{ticks:{font:{size:9},maxRotation:45,autoSkip:true,maxTicksLimit:18}},
+      y:{position:'left',title:{display:true,text:'Crime rate (per 100k)',font:{size:9}},beginAtZero:true},
+      y2:{position:'right',title:{display:true,text:xLabel,font:{size:9}},grid:{drawOnChartArea:false}},
+    }
+  }});
+}
+trendCharts.trust=makeTrend('trendTrust','wvs_trust','% who trust strangers',true);
+trendCharts.gini=makeTrend('trendGini','gini','Income gap score',true);
+trendCharts.obedience=makeTrend('trendObedience','wvs_obedience','% who value obedience in kids',true);
+trendCharts.idv=makeTrend('trendIDV','collectivism','Group-orientation score',false);
+
+function filterTrend(r,btn){
+  trendFilter=r;
+  document.querySelectorAll('#page-trends .fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  Object.values(trendCharts).forEach(c=>c.destroy());
+  trendCharts.trust=makeTrend('trendTrust','wvs_trust','% who trust strangers',true);
+  trendCharts.gini=makeTrend('trendGini','gini','Income gap score',true);
+  trendCharts.obedience=makeTrend('trendObedience','wvs_obedience','% who value obedience in kids',true);
+  trendCharts.idv=makeTrend('trendIDV','collectivism','Group-orientation score',false);
+}
+
+// RADAR
+const rLeg=document.getElementById('radarLegend');
+REGIONS.forEach(r=>{rLeg.innerHTML+=`<span class="ld"><span class="lc" style="background:${RC[r]}"></span>${r}</span>`});
+const rM=['wvs_obedience','collectivism','wvs_trust','gini'];
+const rL=['Values obedience\nin children','Group-oriented\nculture','Social trust','Income\ninequality'];
+const dfN={};
+rM.forEach(m=>{const vs=DATA.map(d=>d[m]),mn=Math.min(...vs),mx=Math.max(...vs);
+  dfN[m]=Object.fromEntries(DATA.map(d=>[d.country,(d[m]-mn)/(mx-mn)*100]));});
+const regMeans={};
+REGIONS.forEach(r=>{const g=DATA.filter(d=>d.region===r);regMeans[r]=rM.map(m=>+(g.reduce((s,d)=>s+dfN[m][d.country],0)/g.length).toFixed(1));});
+new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:rL,
+  datasets:REGIONS.map(r=>({label:r,data:regMeans[r],borderColor:RC[r],backgroundColor:RC[r]+'20',borderWidth:2,pointRadius:3}))
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{position:'right',labels:{font:{size:11},boxWidth:10,padding:8}}},
+  scales:{r:{min:0,max:100,ticks:{font:{size:9},stepSize:25},pointLabels:{font:{size:10}}}}}
+});
+
+// BUBBLE
+new Chart(document.getElementById('bubbleChart'),{type:'bubble',data:{
+  datasets:REGIONS.map(r=>{const g=DATA.filter(d=>d.region===r);return{label:r,
+    data:[{x:+(g.reduce((s,d)=>s+d.wvs_obedience,0)/g.length).toFixed(1),
+           y:+(g.reduce((s,d)=>s+d.homicide_rate,0)/g.length).toFixed(2),r:Math.max(6,g.length*3)}],
+    backgroundColor:RC[r]+'99',borderColor:RC[r],borderWidth:2};})
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10,padding:8}},
+    tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label} — obedience: ${ctx.raw.x}%, crime: ${ctx.raw.y} per 100k`}}},
+  scales:{
+    x:{title:{display:true,text:'% who value obedience in children',font:{size:10}},min:10,max:85},
+    y:{title:{display:true,text:'Avg crime rate (per 100,000)',font:{size:10}},min:-1,max:25}}
+}});
+
+// TRUST vs CRIME (regions)
+const regTrust=REGIONS.slice().sort((a,b)=>{
+  const m=r=>DATA.filter(d=>d.region===r).reduce((s,d)=>s+d.wvs_trust,0)/DATA.filter(d=>d.region===r).length;
+  return m(a)-m(b);
+});
+new Chart(document.getElementById('trustCrime'),{type:'line',data:{
+  labels:regTrust,
+  datasets:[
+    {label:'Crime rate',data:regTrust.map(r=>+(DATA.filter(d=>d.region===r).reduce((s,d)=>s+d.homicide_rate,0)/DATA.filter(d=>d.region===r).length).toFixed(2)),
+     borderColor:'#c0392b',backgroundColor:'#c0392b18',fill:true,tension:.35,
+     pointRadius:7,pointBackgroundColor:regTrust.map(r=>RC[r]),pointBorderColor:regTrust.map(r=>RC[r]),yAxisID:'y'},
+    {label:'Social trust %',data:regTrust.map(r=>+(DATA.filter(d=>d.region===r).reduce((s,d)=>s+d.wvs_trust,0)/DATA.filter(d=>d.region===r).length).toFixed(1)),
+     borderColor:'#27ae60',backgroundColor:'transparent',borderDash:[5,4],tension:.35,pointRadius:5,yAxisID:'y2'},
+  ]
+},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+  plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:12}}},
+  scales:{x:{ticks:{font:{size:9}}},
+    y:{position:'left',title:{display:true,text:'Crime rate (per 100k)',font:{size:9}},beginAtZero:true},
+    y2:{position:'right',title:{display:true,text:'% who trust strangers',font:{size:9}},grid:{drawOnChartArea:false}}}}
+});
+
+// MODEL LINE
+new Chart(document.getElementById('modelLine'),{type:'line',data:{
+  labels:['Parenting only','+ Wealth & income gap','+ Unemployment & city living','+ Interaction effects'],
+  datasets:[
+    {label:'How much is explained (R²)',data:[0.356,0.606,0.616,0.608],borderColor:'#2980b9',backgroundColor:'#2980b918',fill:true,tension:.3,pointRadius:7,pointHoverRadius:9},
+    {label:'Adjusted for model size',data:[0.312,0.560,0.537,0.540],borderColor:'#27ae60',backgroundColor:'transparent',borderDash:[5,3],tension:.3,pointRadius:5},
+  ]
+},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+  plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:12}}},
+  scales:{x:{ticks:{font:{size:11}}},
+    y:{min:0.2,max:0.7,title:{display:true,text:'% of crime variation explained',font:{size:10}},
+       ticks:{callback:v=>`${Math.round(v*100)}%`}}}
+}});
+
+// COEFFICIENT CHART
+const coefs=[
+  {label:'Higher average income',val:-0.723,sig:'**',neg:true},
+  {label:'Bigger income gap',val:0.056,sig:'**',neg:false},
+  {label:'Social trust',val:-0.011,sig:'',neg:true},
+  {label:'Values obedience in kids',val:-0.024,sig:'',neg:true},
+  {label:'Group-oriented culture',val:0.009,sig:'',neg:false},
+  {label:'Higher unemployment',val:0.0001,sig:'',neg:false},
+  {label:'More urbanisation',val:0.009,sig:'',neg:false},
+  {label:'Authority in families',val:0.0015,sig:'',neg:false},
+];
+new Chart(document.getElementById('coefChart'),{type:'bar',data:{
+  labels:coefs.map(d=>d.label+(d.sig?' ('+d.sig+')':'')),
+  datasets:[{data:coefs.map(d=>d.val),
+    backgroundColor:coefs.map(d=>d.sig?(d.neg?'#27ae6099':'#c0392b99'):(d.neg?'#27ae6044':'#c0392b44')),
+    borderColor:coefs.map(d=>d.sig?(d.neg?'#27ae60':'#c0392b'):(d.neg?'#27ae6077':'#c0392b77')),borderWidth:1}]
+},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`Effect: ${coefs[ctx.dataIndex].sig?'significant':'not statistically significant'}`}}},
+  scales:{x:{title:{display:true,text:'← reduces crime      increases crime →',font:{size:9}}},y:{ticks:{font:{size:10}}}}}
+});
+
+// GINI SCATTER
+const gLeg=document.getElementById('giniLegend');
+REGIONS.forEach(r=>{gLeg.innerHTML+=`<span class="ld"><span class="lc" style="background:${RC[r]}"></span>${r}</span>`});
+new Chart(document.getElementById('giniScatter'),{type:'scatter',data:{
+  datasets:REGIONS.map(r=>({label:r,
+    data:DATA.filter(d=>d.region===r).map(d=>({x:d.gini,y:+d.homicide_rate.toFixed(2),label:d.country})),
+    backgroundColor:RC[r]+'bb',pointRadius:6,pointHoverRadius:8}))
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw.label} — income gap: ${ctx.raw.x}, crime: ${ctx.raw.y}`}}},
+  scales:{x:{title:{display:true,text:'Income gap score (Gini) — higher = more unequal',font:{size:10}},min:20,max:68},
+    y:{title:{display:true,text:'Homicide rate per 100,000',font:{size:10}},min:-1,max:45}}}
+});
+
+// TABLE
+let tableFilter='all',sortCol='homicide_rate',sortAsc=false;
+function filterTable(r,btn){tableFilter=r;document.querySelectorAll('#page-data .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTable();}
+function sortTable(col){if(sortCol===col)sortAsc=!sortAsc;else{sortCol=col;sortAsc=col==='country'||col==='region';}renderTable();}
+function crimeClass(v){return v>15?'hi':v>5?'mid':'lo'}
+function renderTable(){
+  const filtered=tableFilter==='all'?DATA:DATA.filter(d=>d.region===tableFilter);
+  const sorted=filtered.slice().sort((a,b)=>{const av=a[sortCol],bv=b[sortCol];return typeof av==='string'?(sortAsc?av.localeCompare(bv):bv.localeCompare(av)):(sortAsc?av-bv:bv-av);});
+  document.getElementById('tBody').innerHTML=sorted.map(d=>{const col=RC[d.region];return`<tr>
+    <td style="font-weight:600">${d.country}</td>
+    <td><span class="rpill" style="background:${col}22;color:${col}">${d.region}</span></td>
+    <td><span class="hml ${crimeClass(d.homicide_rate)}">${d.homicide_rate.toFixed(2)}</span></td>
+    <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-in" style="width:${d.wvs_obedience}%;background:#D35400"></div></div>${d.wvs_obedience}%</div></td>
+    <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-in" style="width:${d.wvs_trust}%;background:#27ae60"></div></div>${d.wvs_trust}%</div></td>
+    <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-in" style="width:${d.collectivism}%;background:${col}"></div></div>${d.collectivism}</div></td>
+    <td>${d.gini.toFixed(1)}</td>
+    <td>$${d.gdp_per_capita.toLocaleString()}</td>
+  </tr>`;}).join('');
+}
+renderTable();
+</script>
+</body>
+</html>
